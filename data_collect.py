@@ -35,7 +35,7 @@ def data_collect():
             print(f"采集第{count}组数据...")
             pose = [0, 0, 0, 0, 0, 0]  ##[x, y, z, Rx, Ry, Rz]  # 获取当前机械臂状态 需要根据实际使用的机械臂获得
 
-            with open('./images/poses.txt', 'a+') as f:
+            with open(f'{image_save_path}/poses.txt', 'a+') as f:
                 # 将列表中的元素用空格连接成一行
                 pose_ = [str(i) for i in pose]
                 new_line = f'{",".join(pose_)}\n'
