@@ -11,8 +11,8 @@ import numpy as np
 
 np.set_printoptions(precision=8, suppress=True)
 
-iamges_path = "../data_collection_d435_win/images"  # 手眼标定采集的标定版图片所在路径
-arm_pose_file = "../data_collection_d435_win/images/poses.txt"  # 采集标定板图片时对应的机械臂末端的位姿 从 第一行到最后一行 需要和采集的标定板的图片顺序进行对应
+iamges_path = "../collect_data"  # 手眼标定采集的标定版图片所在路径
+arm_pose_file = "../collect_data/poses.txt"  # 采集标定板图片时对应的机械臂末端的位姿 从 第一行到最后一行 需要和采集的标定板的图片顺序进行对应
 
 
 def euler_angles_to_rotation_matrix(rx, ry, rz):
