@@ -11,8 +11,8 @@ import numpy as np
 
 np.set_printoptions(precision=8, suppress=True)
 
-iamges_path = "../collect_data"  # 手眼标定采集的标定版图片所在路径
-arm_pose_file = "../collect_data/poses.txt"  # 采集标定板图片时对应的机械臂末端的位姿 从 第一行到最后一行 需要和采集的标定板的图片顺序进行对应
+iamges_path = "./collect_data"  # 手眼标定采集的标定版图片所在路径
+arm_pose_file = "./collect_data/poses.txt"  # 采集标定板图片时对应的机械臂末端的位姿 从 第一行到最后一行 需要和采集的标定板的图片顺序进行对应
 
 
 def euler_angles_to_rotation_matrix(rx, ry, rz):
@@ -44,9 +44,9 @@ def pose_to_homogeneous_matrix(pose):
 def camera_calibrate(iamges_path):
     print("++++++++++开始相机标定++++++++++++++")
     # 角点的个数以及棋盘格间距
-    XX = 11  # 标定板的中长度对应的角点的个数
-    YY = 8  # 标定板的中宽度对应的角点的个数
-    L = 0.02  # 标定板一格的长度  单位为米
+    XX = 9  # 标定板的中长度对应的角点的个数
+    YY = 6  # 标定板的中宽度对应的角点的个数
+    L = 0.035  # 标定板一格的长度  单位为米
 
     # 设置寻找亚像素角点的参数，采用的停止准则是最大循环次数30和最大误差容限0.001
     criteria = (cv2.TERM_CRITERIA_MAX_ITER | cv2.TERM_CRITERIA_EPS, 30, 0.001)
@@ -61,12 +61,16 @@ def camera_calibrate(iamges_path):
 
     for i in range(0, 20):  # 标定好的图片在iamges_path路径下，从0.jpg到x.jpg   一般采集20张左右就够，实际情况可修改
 
-        image = f"{iamges_path}/images{i}.jpg"
+        image = f"{iamges_path}/{i}.jpg"
         print(f"正在处理第{i}张图片：{image}")
 
         if os.path.exists(image):
 
             img = cv2.imread(image)
+            print(f"图像大小： {img.shape}")
+            # h_init, width_init = img.shape[:2]
+            # img = cv2.resize(src=img, dsize=(width_init // 2, h_init // 2))
+            # print(f"图像大小(resize)： {img.shape}")
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
             size = gray.shape[::-1]
@@ -76,10 +80,10 @@ def camera_calibrate(iamges_path):
             print(f"右下角点：{corners[-1, -1]}")
 
             # 绘制角点并显示图像
-            cv2.drawChessboardCorners(img, (11, 8), corners, ret)
+            cv2.drawChessboardCorners(img, (XX, YY), corners, ret)
             cv2.imshow('Chessboard', img)
 
-            cv2.waitKey(10)  ## 停留1s, 观察找到的角点是否正确
+            cv2.waitKey(3000)  ## 停留1s, 观察找到的角点是否正确
 
             if ret:
 
